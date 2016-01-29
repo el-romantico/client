@@ -28,7 +28,7 @@ public class GameActivity extends AppCompatActivity {
         // Initialize rituals hub.
         hub = RitualsHub.Instance();
 
-        hub.OnNextGame(new RitualsHub.NextGameHandler() {
+        hub.OnNextGame(new RitualsHub.NewGameHandler() {
 
             @Override
             public void Handle(int runeIndex) {
