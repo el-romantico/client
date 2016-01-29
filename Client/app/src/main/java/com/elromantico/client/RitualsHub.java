@@ -14,7 +14,7 @@ public class RitualsHub {
 
     public interface NewGameHandler {
 
-        void Handle(int runeIndex);
+        void Handle(int playersCount, int runeIndex);
     }
 
     public interface EndGameHandler {
@@ -70,13 +70,7 @@ public class RitualsHub {
 
             @Override
             public void OnReceived(JSONArray args) {
-                int runeIndex = 0;
-                try {
-                    runeIndex = args.getInt(0);
-                } catch (Exception e) {
-                    // TODO: Handle exception gracefully...
-                }
-                handler.Handle(runeIndex);
+                onNewGame(handler, args);
             }
         });
     }
@@ -86,13 +80,7 @@ public class RitualsHub {
 
             @Override
             public void OnReceived(JSONArray args) {
-                int runeIndex = 0;
-                try {
-                    runeIndex = args.getInt(0);
-                } catch (Exception e) {
-                    // TODO: Handle exception gracefully...
-                }
-                handler.Handle(runeIndex);
+                onNewGame(handler, args);
             }
         });
     }
@@ -105,5 +93,17 @@ public class RitualsHub {
                 handler.Handle(true);
             }
         });
+    }
+
+    private void onNewGame(final NewGameHandler handler, JSONArray args) {
+        int playersCount = 0;
+        int runeIndex = 0;
+        try {
+            playersCount = args.getInt(0);
+            runeIndex = args.getInt(1);
+        } catch (Exception e) {
+            // TODO: Handle exception gracefully...
+        }
+        handler.Handle(playersCount, runeIndex);
     }
 }

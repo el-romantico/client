@@ -31,7 +31,7 @@ public class GameActivity extends AppCompatActivity {
         hub.OnNextGame(new RitualsHub.NewGameHandler() {
 
             @Override
-            public void Handle(int runeIndex) {
+            public void Handle(int playersCount, int runeIndex) {
                 // Start next game...
             }
         });

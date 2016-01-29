@@ -21,7 +21,7 @@ public class StartActivity extends AppCompatActivity {
         RitualsHub.Instance().OnStartGame(new RitualsHub.NewGameHandler() {
 
             @Override
-            public void Handle(int runeIndex) {
+            public void Handle(int playersCount, int runeIndex) {
                 dialog.hide();
                 Intent intent = new Intent(StartActivity.this, GameActivity.class);
                 startActivity(intent);
