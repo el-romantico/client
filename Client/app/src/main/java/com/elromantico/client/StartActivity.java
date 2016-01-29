@@ -24,6 +24,7 @@ public class StartActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                RitualsHub.Instance().Connect();
                 Intent intent = new Intent(StartActivity.this, GameActivity.class);
                 startActivity(intent);
             }
