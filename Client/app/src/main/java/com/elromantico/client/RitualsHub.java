@@ -70,7 +70,13 @@ public class RitualsHub {
 
             @Override
             public void OnReceived(JSONArray args) {
-                handler.Handle(42);
+                int runeIndex = 0;
+                try {
+                    runeIndex = args.getInt(0);
+                } catch (Exception e) {
+                    // TODO: Handle exception gracefully...
+                }
+                handler.Handle(runeIndex);
             }
         });
     }
@@ -80,7 +86,13 @@ public class RitualsHub {
 
             @Override
             public void OnReceived(JSONArray args) {
-                handler.Handle(42);
+                int runeIndex = 0;
+                try {
+                    runeIndex = args.getInt(0);
+                } catch (Exception e) {
+                    // TODO: Handle exception gracefully...
+                }
+                handler.Handle(runeIndex);
             }
         });
     }

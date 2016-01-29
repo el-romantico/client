@@ -24,6 +24,8 @@ public class StartActivity extends AppCompatActivity {
             }
         });
 
+        ServerConnection.Instance().Start();
+
         startButton = (LinearLayout) findViewById(R.id.start_button);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
