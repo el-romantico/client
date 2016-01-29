@@ -24,6 +24,8 @@ public class StartActivity extends AppCompatActivity {
             public void Handle(int playersCount, int runeIndex) {
                 dialog.hide();
                 Intent intent = new Intent(StartActivity.this, GameActivity.class);
+                intent.putExtra(Constants.PLAYERS_COUNT_EXTRA, playersCount);
+                intent.putExtra(Constants.RUNE_INDEX_EXTRA, runeIndex);
                 startActivity(intent);
             }
         });

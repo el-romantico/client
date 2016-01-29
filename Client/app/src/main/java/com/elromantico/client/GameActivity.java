@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,13 +18,19 @@ public class GameActivity extends AppCompatActivity {
     RitualsHub hub;
 
     private LinearLayout bottomBar;
-    private TextView bottomText;
+    private TextView bottomText, playersCountText;
+    private ImageView runeImage;
+
+    private int playersCount, runeIndex;
 
     private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        playersCount = getIntent().getIntExtra(Constants.PLAYERS_COUNT_EXTRA, 0);
+        runeIndex = getIntent().getIntExtra(Constants.RUNE_INDEX_EXTRA, 0);
 
         // Initialize rituals hub.
         hub = RitualsHub.Instance();
@@ -40,7 +47,14 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void Handle(boolean isWinner) {
-                // Finish game with appropriate message...
+                bottomBar.setVisibility(View.VISIBLE);
+                if (isWinner) {
+                    bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, R.color.red));
+                    bottomText.setText("YOU LOSE!");
+                } else {
+                    bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, R.color.green));
+                    bottomText.setText("YOU WIN!");
+                }
             }
         });
 
@@ -49,13 +63,19 @@ public class GameActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_game);
 
+        playersCountText = (TextView) findViewById(R.id.players_count_text);
+        playersCountText.setText("" + playersCount);
+
+        runeImage = (ImageView) findViewById(R.id.rune_image);
+//       Set image:
+//      runeImage.setImageBitmap();
+
         bottomText = (TextView) findViewById(R.id.bottom_text);
         bottomBar = (LinearLayout) findViewById(R.id.bottom_bar);
         bottomBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, R.color.red));
-                bottomText.setText("YOU LOSE!");
+                hub.Success();
             }
         });
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
