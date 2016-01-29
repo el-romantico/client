@@ -9,12 +9,10 @@ import com.zsoft.signala.hubs.IHubProxy;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
 
 public class RitualsHub {
 
-    public interface NextGameHandler {
+    public interface NewGameHandler {
 
         void Handle(int runeIndex);
     }
@@ -67,7 +65,17 @@ public class RitualsHub {
         });
     }
 
-    public void OnNextGame(final NextGameHandler  handler) {
+    public void OnStartGame(final NewGameHandler  handler) {
+        hub.On("StartGame", new HubOnDataCallback() {
+
+            @Override
+            public void OnReceived(JSONArray args) {
+                handler.Handle(42);
+            }
+        });
+    }
+
+    public void OnNextGame(final NewGameHandler  handler) {
         hub.On("NextGame", new HubOnDataCallback() {
 
             @Override
