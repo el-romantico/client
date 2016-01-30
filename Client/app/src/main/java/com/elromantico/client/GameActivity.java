@@ -38,26 +38,36 @@ public class GameActivity extends AppCompatActivity {
         hub.OnNextGame(new RitualsHub.NewGameHandler() {
 
             @Override
-            public void Handle(int playersCount, int runeIndex) {
-                bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, android.R.color.holo_blue_light));
-                bottomText.setText("KEEP GOING!");
-                //change picture
-                playersCountText.setText("" + playersCount);
+            public void Handle(final int playersCount, final int runeIndex) {
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, android.R.color.holo_blue_light));
+                        bottomText.setText("KEEP GOING!");
+                        //change picture
+                        playersCountText.setText("" + playersCount);
+                    }
+                }.run();
             }
         });
 
         hub.OnEndGame(new RitualsHub.EndGameHandler() {
 
             @Override
-            public void Handle(boolean isWinner) {
-                bottomBar.setVisibility(View.VISIBLE);
-                if (isWinner) {
-                    bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, R.color.green));
-                    bottomText.setText("YOU WIN!");
-                } else {
-                    bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, R.color.red));
-                    bottomText.setText("YOU LOSE!");
-                }
+            public void Handle(final boolean isWinner) {
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        bottomBar.setVisibility(View.VISIBLE);
+                        if (isWinner) {
+                            bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, R.color.green));
+                            bottomText.setText("YOU WIN!");
+                        } else {
+                            bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, R.color.red));
+                            bottomText.setText("YOU LOSE!");
+                        }
+                    }
+                }.run();
             }
         });
 
