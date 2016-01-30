@@ -18,7 +18,7 @@ public class GameActivity extends AppCompatActivity {
     RitualsHub hub;
 
     private LinearLayout bottomBar;
-    private TextView bottomText, playersCountText;
+    private TextView bottomText, playersCountText, timeLeftText;
     private ImageView runeImage;
 
     private int mPlayersCount, runeIndex;
@@ -46,6 +46,14 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
+        hub.OnUpdateCountdown(new RitualsHub.UpdateCountdownHandler() {
+
+            @Override
+            public void Handle(int timeLeft) {
+                timeLeftText.setText(timeLeft + " sec");
+            }
+        });
+
         hub.OnEndGame(new RitualsHub.EndGameHandler() {
 
             @Override
@@ -68,6 +76,8 @@ public class GameActivity extends AppCompatActivity {
 
         playersCountText = (TextView) findViewById(R.id.players_count_text);
         playersCountText.setText("" + mPlayersCount);
+
+        timeLeftText = (TextView) findViewById(R.id.time_left_text);
 
         runeImage = (ImageView) findViewById(R.id.rune_image);
 //       Set image:
