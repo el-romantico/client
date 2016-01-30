@@ -1,10 +1,12 @@
-package com.elromantico.client.gestures.recorder;
+package com.elromantico.client.gestures;
 
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+
+import com.elromantico.client.gestures.Gesture;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
@@ -13,11 +15,15 @@ import java.util.Arrays;
 
 public class GestureRecorder implements SensorEventListener {
 
-    SensorManager sensorManager;
+    public interface GestureRecorderHandler {
 
-    Context context;
-    GestureRecorderListener listener;
-    CircularFifoQueue<float[]> currentValues;
+        void handle(float[][] values);
+    }
+
+    private SensorManager sensorManager;
+    private Context context;
+    private GestureRecorderHandler handler;
+    private CircularFifoQueue<float[]> currentValues;
 
     public GestureRecorder(Context context) {
         this.context = context;
@@ -37,13 +43,13 @@ public class GestureRecorder implements SensorEventListener {
         };
 
         if (currentValues.size() == currentValues.maxSize()) {
-            listener.recognizeGesture(currentValues.toArray(new float[currentValues.size()][]));
+            handler.handle(currentValues.toArray(new float[currentValues.size()][]));
         }
         currentValues.add(value);
     }
 
-    public void registerListener(GestureRecorderListener listener) {
-        this.listener = listener;
+    public void registerListener(GestureRecorderHandler handler) {
+        this.handler = handler;
         start();
     }
 
@@ -56,8 +62,8 @@ public class GestureRecorder implements SensorEventListener {
         sensorManager.unregisterListener(this);
     }
 
-    public void unregisterListener(GestureRecorderListener listener) {
-        this.listener = null;
+    public void unregisterListener() {
+        this.handler = null;
         stop();
     }
 
@@ -72,5 +78,4 @@ public class GestureRecorder implements SensorEventListener {
     public void resetBuffer(int runeIndex) {
         currentValues = new CircularFifoQueue(4); // TODO
     }
-
 }

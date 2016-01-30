@@ -15,8 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.elromantico.client.gestures.GestureRecognitionListener;
 import com.elromantico.client.gestures.GestureRecognitionService;
+import com.elromantico.client.gestures.GestureRecognitionService.GestureRecognitionHandler;
 import com.elromantico.client.gestures.classifier.Distribution;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -24,21 +24,19 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 public class GameActivity extends AppCompatActivity {
 
-    RitualsHub hub;
-
+    private RitualsHub hub;
     private LinearLayout bottomBar;
     private TextView bottomText, playersCountText, timeLeftText;
     private ImageView runeImage;
-
-    private int mPlayersCount, runeIndex;
-
+    private int mPlayersCount;
+    private int runeIndex;
     private GoogleApiClient client;
 
     GestureRecognitionService recognitionService;
-    GestureRecognitionListener gestureListener = new GestureRecognitionListener() {
+    GestureRecognitionHandler gestureListener = new GestureRecognitionHandler() {
 
         @Override
-        public void onGestureRecognized(final Distribution distribution) {
+        public void handle(final Distribution distribution) {
 //            if (runeIndex == distribution.getBestMatch()) {
 //            }
             runOnUiThread(new Runnable() {
@@ -86,6 +84,8 @@ public class GameActivity extends AppCompatActivity {
                 bottomText.setText("KEEP GOING!");
                 //change picture
                 playersCountText.setText("" + playersCount);
+
+
             }
         });
 

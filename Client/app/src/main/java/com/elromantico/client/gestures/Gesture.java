@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Gesture implements Serializable {
 
 	private static final long serialVersionUID = 7148492971634218981L;
+
 	private String label;
 	private float[][] values;
 

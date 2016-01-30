@@ -11,10 +11,14 @@ import java.util.Set;
 import com.elromantico.client.gestures.classifier.Distribution;
 import com.elromantico.client.gestures.classifier.GestureClassifier;
 import com.elromantico.client.gestures.classifier.featureExtraction.NormedGridExtractor;
-import com.elromantico.client.gestures.recorder.GestureRecorder;
-import com.elromantico.client.gestures.recorder.GestureRecorderListener;
+import com.elromantico.client.gestures.GestureRecorder.GestureRecorderHandler;
 
-public class GestureRecognitionService extends Service implements GestureRecorderListener {
+public class GestureRecognitionService extends Service implements GestureRecorderHandler {
+
+    public interface GestureRecognitionHandler {
+
+        void handle(Distribution distribution);
+    }
 
     public class GestureRecognitionServiceBinder extends Binder {
 
@@ -25,15 +29,14 @@ public class GestureRecognitionService extends Service implements GestureRecorde
 
     private final IBinder binder = new GestureRecognitionServiceBinder();
 
-    GestureRecorder recorder;
-    GestureClassifier classifier;
-    String activeTrainingSet;
+    private GestureRecorder recorder;
+    private GestureClassifier classifier;
+    private String activeTrainingSet;
+    private Set<GestureRecognitionHandler> handlers = new HashSet<>();
 
-    Set<GestureRecognitionListener> listeners = new HashSet<>();
-
-    public void registerListener(GestureRecognitionListener listener) {
+    public void registerListener(GestureRecognitionHandler listener) {
         if (listener != null) {
-            listeners.add(listener);
+            handlers.add(listener);
         }
     }
 
@@ -43,9 +46,9 @@ public class GestureRecognitionService extends Service implements GestureRecorde
         classifier.loadTrainingSet(trainingSetName);
     }
 
-    public void unregisterListener(GestureRecognitionListener listener) {
-        listeners.remove(listener);
-        if (listeners.isEmpty()) {
+    public void unregisterListener(GestureRecognitionHandler handler) {
+        handlers.remove(handler);
+        if (handlers.isEmpty()) {
             stopClassificationMode();
         }
     }
@@ -67,20 +70,20 @@ public class GestureRecognitionService extends Service implements GestureRecorde
     }
 
     @Override
-    public void recognizeGesture(float[][] values) {
+    public void handle(float[][] values) {
         recorder.pause(true);
         Distribution distribution = classifier.classifySignal(activeTrainingSet, new Gesture(values, null));
         recorder.pause(false);
         if (distribution != null && distribution.size() > 0) {
-            for (GestureRecognitionListener listener : listeners) {
-                listener.onGestureRecognized(distribution);
+            for (GestureRecognitionHandler handler : handlers) {
+                handler.handle(distribution);
             }
         }
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        recorder.unregisterListener(this);
+        recorder.unregisterListener();
         return super.onUnbind(intent);
     }
 }
