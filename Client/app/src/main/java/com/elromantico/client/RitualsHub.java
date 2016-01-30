@@ -22,11 +22,6 @@ public class RitualsHub {
         void Handle(boolean isWinner);
     }
 
-    public interface UpdateCountdownHandler {
-
-        void Handle(int timeLeft);
-    }
-
     private static RitualsHub instance;
 
     private IHubProxy hub;
@@ -70,6 +65,18 @@ public class RitualsHub {
         });
     }
 
+    public void TimeoutExpired() {
+        hub.Invoke("TimeoutExpired", new ArrayList<>(), new HubInvokeCallback() {
+            @Override
+            public void OnResult(boolean succeeded, String response) {
+            }
+
+            @Override
+            public void OnError(Exception ex) {
+            }
+        });
+    }
+
     public void OnStartGame(final NewGameHandler  handler) {
         hub.On("StartGame", new HubOnDataCallback() {
 
@@ -97,21 +104,6 @@ public class RitualsHub {
             public void OnReceived(JSONArray args) {
                 try {
                     handler.Handle(args.getBoolean(0));
-                } catch (Exception e) {
-                    //TODO after the game jam
-                }
-            }
-
-        });
-    }
-
-    public void OnUpdateCountdown(final UpdateCountdownHandler handler) {
-        hub.On("UpdateCountdown", new HubOnDataCallback() {
-
-            @Override
-            public void OnReceived(JSONArray args) {
-                try {
-                    handler.Handle(args.getInt(0));
                 } catch (Exception e) {
                     //TODO after the game jam
                 }

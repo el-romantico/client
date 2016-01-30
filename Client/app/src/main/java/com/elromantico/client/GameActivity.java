@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,8 @@ public class GameActivity extends AppCompatActivity {
     private ImageView runeImage;
     private int mPlayersCount;
     private int runeIndex;
+
+    private long elapsedMillis, lastTrackedMillis;
 
     private GestureRecognitionService recognitionService;
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -53,6 +56,31 @@ public class GameActivity extends AppCompatActivity {
         }
     };
 
+    Handler timerHandler = new Handler();
+    Runnable timerRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            elapsedMillis = System.currentTimeMillis() - lastTrackedMillis;
+            if (elapsedMillis > Constants.ANSWER_TIME_IN_MILLIS) {
+                elapsedMillis = Constants.ANSWER_TIME_IN_MILLIS;
+                hub.TimeoutExpired();
+                timerHandler.removeCallbacks(timerRunnable);
+                timeLeftText.setText("0 sec");
+                bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, android.R.color.holo_blue_light));
+                bottomText.setText("PLEASE WAIT...");
+                return;
+            }
+
+            int elapsedSeconds = (int) (elapsedMillis / 1000);
+
+            timeLeftText.setText(Constants.ANSWER_TIME_IN_MILLIS / 1000 - elapsedSeconds + " sec");
+            timerHandler.postDelayed(this, 1000);
+        }
+    };
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,19 +100,12 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void Handle(int playersCount, int runeIndex) {
                 //change picture
+                lastTrackedMillis = System.currentTimeMillis();
                 Toast.makeText(GameActivity.this, "Next round starting!", Toast.LENGTH_LONG);
                 bottomBar.setVisibility(View.GONE);
                 playersCountText.setText("" + playersCount);
 
 
-            }
-        });
-
-        hub.OnUpdateCountdown(new RitualsHub.UpdateCountdownHandler() {
-
-            @Override
-            public void Handle(int timeLeft) {
-                timeLeftText.setText(timeLeft + " sec");
             }
         });
 
@@ -105,6 +126,8 @@ public class GameActivity extends AppCompatActivity {
 
         // Start connection to server.
         ServerConnection.Instance().Start();
+        timerHandler.post(timerRunnable);
+        lastTrackedMillis = System.currentTimeMillis();
 
         setContentView(R.layout.activity_game);
 
@@ -127,5 +150,11 @@ public class GameActivity extends AppCompatActivity {
                 hub.Success();
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        timerHandler.removeCallbacks(timerRunnable);
     }
 }
