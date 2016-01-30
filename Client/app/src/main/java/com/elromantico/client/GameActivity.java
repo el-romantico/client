@@ -38,15 +38,9 @@ public class GameActivity extends AppCompatActivity {
 
                 @Override
                 public void handle(final Distribution distribution) {
-//            if (runeIndex == distribution.getBestMatch()) {
-//            }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(GameActivity.this, String.format("%s: %f", distribution.getBestMatch(), distribution.getBestDistance()), Toast.LENGTH_LONG).show();
-                            System.err.println(String.format("%s: %f", distribution.getBestMatch(), distribution.getBestDistance()));
-                        }
-                    });
+                    if (runeIndex == distribution.getBestMatch()) {
+                        hub.Success();
+                    }
                 }
             });
         }

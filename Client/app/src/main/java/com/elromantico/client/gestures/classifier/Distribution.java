@@ -37,8 +37,8 @@ public class Distribution implements Parcelable {
 		}
 	}
 
-	public String getBestMatch() {
-		return best;
+	public int getBestMatch() {
+		return Integer.parseInt(best);
 	}
 
 	public double getBestDistance() {
