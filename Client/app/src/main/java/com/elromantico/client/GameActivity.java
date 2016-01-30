@@ -19,8 +19,6 @@ import com.elromantico.client.gestures.GestureRecognitionService;
 import com.elromantico.client.gestures.GestureRecognitionService.GestureRecognitionHandler;
 import com.elromantico.client.gestures.classifier.Distribution;
 import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -30,7 +28,6 @@ public class GameActivity extends AppCompatActivity {
     private ImageView runeImage;
     private int mPlayersCount;
     private int runeIndex;
-    private GoogleApiClient client;
 
     GestureRecognitionService recognitionService;
     GestureRecognitionHandler gestureListener = new GestureRecognitionHandler() {
@@ -134,14 +131,12 @@ public class GameActivity extends AppCompatActivity {
                 hub.Success();
             }
         });
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
-        client.connect();
         Action viewAction = Action.newAction(
                 Action.TYPE_VIEW, // TODO: choose an action type.
                 "Game Page", // TODO: Define a title for the content shown.
@@ -152,7 +147,6 @@ public class GameActivity extends AppCompatActivity {
                 // TODO: Make sure this auto-generated app deep link URI is correct.
                 Uri.parse("android-app://com.elromantico.client/http/host/path")
         );
-        AppIndex.AppIndexApi.start(client, viewAction);
     }
 
     @Override
@@ -169,7 +163,5 @@ public class GameActivity extends AppCompatActivity {
                 // TODO: Make sure this auto-generated app deep link URI is correct.
                 Uri.parse("android-app://com.elromantico.client/http/host/path")
         );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
     }
 }
