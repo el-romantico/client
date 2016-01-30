@@ -30,6 +30,8 @@ public class GameActivity extends AppCompatActivity {
     private int mRuneIndex;
     private boolean mIsPlaying;
 
+    private double minDistance = 100.0;
+
     private long elapsedMillis, lastTrackedMillis;
 
     private static double THRESHOLD = 7.0;
@@ -45,6 +47,11 @@ public class GameActivity extends AppCompatActivity {
 
                 @Override
                 public void handle(final Distribution distribution) {
+                    if (distribution.getBestDistance() < minDistance) {
+                        minDistance = distribution.getBestDistance();
+                        Log.d("RUNE", "min distance:" + minDistance);
+                    }
+
                     if (mIsPlaying && mRuneIndex == distribution.getBestMatch() && distribution.getBestDistance() < THRESHOLD) {
 
                         Log.d("RUNE", "won (distance to target):" + distribution.getBestDistance());
