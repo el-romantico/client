@@ -152,6 +152,7 @@ public class GameActivity extends AppCompatActivity {
                 bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, android.R.color.holo_blue_light));
                 bottomText.setText("PLEASE WAIT...");
                 hub.Success();
+                timerHandler.removeCallbacks(timerRunnable);
             }
         });
     }
