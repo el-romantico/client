@@ -24,7 +24,9 @@
         <activity
             android:name=".GameActivity"
             android:hardwareAccelerated="false"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden" />
         <service android:name="com.elromantico.client.gestures.GestureRecognitionService"
             android:enabled="true" android:label="GestureRecognitionService">
         </service>

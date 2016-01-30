@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,7 +31,7 @@ public class GameActivity extends AppCompatActivity {
 
     private long elapsedMillis, lastTrackedMillis;
 
-    private static double THRESHOLD = 8.0;
+    private static double THRESHOLD = 7.0;
 
     private GestureRecognitionService recognitionService;
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -45,6 +46,7 @@ public class GameActivity extends AppCompatActivity {
                 public void handle(final Distribution distribution) {
                     if (mIsPlaying && mRuneIndex == distribution.getBestMatch() && distribution.getBestDistance() < THRESHOLD) {
 
+                        Log.d("RUNE", "won (distance to target):" + distribution.getBestDistance());
                         bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, android.R.color.holo_blue_light));
                         bottomText.setText("PLEASE WAIT...");
                         hub.Success();
