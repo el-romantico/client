@@ -39,6 +39,8 @@ public class GameActivity extends AppCompatActivity {
                 @Override
                 public void handle(final Distribution distribution) {
                     if (runeIndex == distribution.getBestMatch()) {
+                        bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, android.R.color.holo_blue_light));
+                        bottomText.setText("PLEASE WAIT...");
                         hub.Success();
                     }
                 }
@@ -68,9 +70,9 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void Handle(int playersCount, int runeIndex) {
-                bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, android.R.color.holo_blue_light));
-                bottomText.setText("KEEP GOING!");
                 //change picture
+                Toast.makeText(GameActivity.this, "Next round starting!", Toast.LENGTH_LONG);
+                bottomBar.setVisibility(View.GONE);
                 playersCountText.setText("" + playersCount);
 
 
@@ -119,6 +121,8 @@ public class GameActivity extends AppCompatActivity {
         bottomBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, android.R.color.holo_blue_light));
+                bottomText.setText("PLEASE WAIT...");
                 hub.Success();
             }
         });
