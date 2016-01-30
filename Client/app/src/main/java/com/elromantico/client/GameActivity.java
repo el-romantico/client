@@ -60,8 +60,9 @@ public class GameActivity extends AppCompatActivity {
         mPlayersCount = getIntent().getIntExtra(Constants.PLAYERS_COUNT_EXTRA, 0);
         runeIndex = getIntent().getIntExtra(Constants.RUNE_INDEX_EXTRA, 0);
 
-        Intent bindIntent = new Intent("com.elromantico.client.gestures.GESTURE_RECOGNIZER");
-        bindService(bindIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+        Context context = this.getApplicationContext();
+        Intent serviceIntent = new Intent(context, GestureRecognitionService.class);
+        context.startService(serviceIntent);
 
         // Initialize rituals hub.
         hub = RitualsHub.Instance();
