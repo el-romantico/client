@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -162,6 +163,10 @@ public class GameActivity extends AppCompatActivity {
         playersCountText.setText("" + mPlayersCount);
 
         timeLeftText = (TextView) findViewById(R.id.time_left_text);
+
+        Typeface type = Typeface.createFromAsset(getAssets(), "fonts/gagalin.otf");
+        timeLeftText.setTypeface(type);
+        playersCountText.setTypeface(type);
 
         runeImage = (GIFView) findViewById(R.id.rune_image);
         runeImage.setGIFResource(DrawablesMap.drawablesMap.get(mRuneIndex));
