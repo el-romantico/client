@@ -90,8 +90,13 @@ public class RitualsHub {
 
             @Override
             public void OnReceived(JSONArray args) {
-                handler.Handle(true);
+                try {
+                    handler.Handle(args.getBoolean(0));
+                } catch (Exception e) {
+                    //TODO after the game jam
+                }
             }
+
         });
     }
 
