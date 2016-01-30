@@ -1,14 +1,23 @@
 package com.elromantico.client;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.elromantico.client.gestures.GestureRecognitionListener;
+import com.elromantico.client.gestures.GestureRecognitionService;
+import com.elromantico.client.gestures.classifier.Distribution;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -25,12 +34,58 @@ public class GameActivity extends AppCompatActivity {
 
     private GoogleApiClient client;
 
+    GestureRecognitionService recognitionService;
+    GestureRecognitionListener gestureListener = new GestureRecognitionListener() {
+
+        @Override
+        public void onGestureLearned(String gestureName) {
+            Toast.makeText(GameActivity.this, String.format("Gesture %s learned", gestureName), Toast.LENGTH_SHORT).show();
+            System.err.println("Gesture %s learned");
+        }
+
+        @Override
+        public void onTrainingSetDeleted(String trainingSet) {
+            Toast.makeText(GameActivity.this, String.format("Training set %s deleted", trainingSet), Toast.LENGTH_SHORT).show();
+            System.err.println(String.format("Training set %s deleted", trainingSet));
+        }
+
+        @Override
+        public void onGestureRecognized(final Distribution distribution) {
+//            if (runeIndex == distribution.getBestMatch()) {
+//            }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(GameActivity.this, String.format("%s: %f", distribution.getBestMatch(), distribution.getBestDistance()), Toast.LENGTH_LONG).show();
+                    System.err.println(String.format("%s: %f", distribution.getBestMatch(), distribution.getBestDistance()));
+                }
+            });
+        }
+    };
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder binder) {
+            recognitionService = ((GestureRecognitionService.GestureRecognitionServiceBinder) binder).getService();
+            recognitionService.startClassificationMode("default");
+            recognitionService.registerListener(gestureListener);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName className) {
+            recognitionService = null;
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mPlayersCount = getIntent().getIntExtra(Constants.PLAYERS_COUNT_EXTRA, 0);
         runeIndex = getIntent().getIntExtra(Constants.RUNE_INDEX_EXTRA, 0);
+
+        Intent bindIntent = new Intent("com.elromantico.client.gestures.GESTURE_RECOGNIZER");
+        bindService(bindIntent, serviceConnection, Context.BIND_AUTO_CREATE);
 
         // Initialize rituals hub.
         hub = RitualsHub.Instance();

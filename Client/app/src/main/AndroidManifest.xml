@@ -21,6 +21,12 @@
         <activity
             android:name=".GameActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <service android:name="com.elromantico.client.gestures.GestureRecognitionService"
+            android:enabled="true" android:label="GestureRecognitionService">
+            <intent-filter>
+                <action android:name="com.elromantico.client.gestures.GESTURE_RECOGNIZER" />
+            </intent-filter>
+        </service>
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data
