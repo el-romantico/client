@@ -26,6 +26,7 @@ public class GameActivity extends AppCompatActivity {
     private GIFView runeImage;
     private int mPlayersCount;
     private int mRuneIndex;
+    private boolean mIsPlaying;
 
     private long elapsedMillis, lastTrackedMillis;
 
@@ -40,10 +41,11 @@ public class GameActivity extends AppCompatActivity {
 
                 @Override
                 public void handle(final Distribution distribution) {
-                    if (mRuneIndex == distribution.getBestMatch()) {
+                    if (mIsPlaying && mRuneIndex == distribution.getBestMatch()) {
                         bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, android.R.color.holo_blue_light));
                         bottomText.setText("PLEASE WAIT...");
                         hub.Success();
+                        mIsPlaying = false;
                     }
                 }
             });
@@ -79,11 +81,11 @@ public class GameActivity extends AppCompatActivity {
     };
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mIsPlaying = true;
         mPlayersCount = getIntent().getIntExtra(Constants.PLAYERS_COUNT_EXTRA, 0);
         mRuneIndex = getIntent().getIntExtra(Constants.RUNE_INDEX_EXTRA, 0);
 
@@ -101,7 +103,9 @@ public class GameActivity extends AppCompatActivity {
 
                 mRuneIndex = runeIndex;
                 mPlayersCount = playersCount;
+                mIsPlaying = true;
                 runeImage.setGIFResource(DrawablesMap.drawablesMap.get(runeIndex));
+
                 lastTrackedMillis = System.currentTimeMillis();
                 timerHandler.post(timerRunnable);
                 Toast.makeText(GameActivity.this, "Next round starting!", Toast.LENGTH_LONG);
