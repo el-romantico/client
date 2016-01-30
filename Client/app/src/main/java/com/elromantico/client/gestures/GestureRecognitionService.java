@@ -72,4 +72,9 @@ public class GestureRecognitionService extends Service implements GestureRecorde
         recorder.unregisterListener();
         return super.onUnbind(intent);
     }
+
+    public void reset(int runeIndex) {
+        int bufferSize = 42; // TODO: Get size from runeIndex.
+        recorder.resetBuffer(bufferSize);
+    }
 }

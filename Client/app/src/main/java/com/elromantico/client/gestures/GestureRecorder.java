@@ -70,7 +70,7 @@ public class GestureRecorder implements SensorEventListener {
         }
     }
 
-    public void resetBuffer(int runeIndex) {
-        currentValues = new CircularFifoQueue(4); // TODO
+    public void resetBuffer(int bufferSize) {
+        currentValues = new CircularFifoQueue(bufferSize); // TODO
     }
 }
