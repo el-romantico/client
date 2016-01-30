@@ -20,22 +20,6 @@ import com.elromantico.client.gestures.classifier.Distribution;
 
 public class GameActivity extends AppCompatActivity {
 
-    private class NewRoundHandler implements RitualsHub.NewGameHandler {
-
-        @Override
-        public void Handle(int playersCount, int runeIndex) {
-            mRuneIndex = runeIndex;
-            runeImage.setGIFResource(DrawablesMap.drawablesMap.get(runeIndex));
-            lastTrackedMillis = System.currentTimeMillis();
-            timerHandler.post(timerRunnable);
-            Toast.makeText(GameActivity.this, "Next round starting!", Toast.LENGTH_LONG);
-//            bottomBar.setVisibility(View.GONE);
-            playersCountText.setText("" + playersCount);
-
-            recognitionService.reset(runeIndex);
-        }
-    }
-
     private RitualsHub hub;
     private LinearLayout bottomBar;
     private TextView bottomText, playersCountText, timeLeftText;
@@ -110,8 +94,21 @@ public class GameActivity extends AppCompatActivity {
         // Initialize rituals hub.
         hub = RitualsHub.Instance();
 
-        hub.OnStartGame(new NewRoundHandler());
-        hub.OnNextGame(new NewRoundHandler());
+        hub.OnNextGame(new RitualsHub.NewGameHandler() {
+
+            @Override
+            public void Handle(int playersCount, int runeIndex) {
+                //change picture
+                lastTrackedMillis = System.currentTimeMillis();
+                Toast.makeText(GameActivity.this, "Next round starting!", Toast.LENGTH_LONG);
+                bottomBar.setVisibility(View.GONE);
+                playersCountText.setText("" + playersCount);
+
+                GameActivity.this.mPlayersCount = playersCount;
+                GameActivity.this.mRuneIndex = runeIndex;
+                recognitionService.reset(runeIndex);
+            }
+        });
 
         hub.OnEndGame(new RitualsHub.EndGameHandler() {
 

@@ -1,6 +1,8 @@
 package com.elromantico.client.gestures.classifier;
 
 import android.content.Context;
+import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,6 +21,7 @@ public class GestureClassifier {
 	protected IFeatureExtractor featureExtractor;
 	protected String activeTrainingSet = "";
 	private final Context context;
+	private String storageDir = "storage/sdcard0";
 
 	public GestureClassifier(IFeatureExtractor fE, Context context) {
 		trainingSet = new ArrayList<>();
@@ -34,7 +37,7 @@ public class GestureClassifier {
 			FileInputStream input;
 			ObjectInputStream o;
 			try {
-				input = new FileInputStream(new File(context.getExternalFilesDir(null), activeTrainingSet + ".gst"));
+				input = new FileInputStream(new File(storageDir, activeTrainingSet + ".gst"));
 				o = new ObjectInputStream(input);
 				trainingSet = (ArrayList<Gesture>) o.readObject();
 				try {
@@ -44,6 +47,7 @@ public class GestureClassifier {
 					e.printStackTrace();
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				trainingSet = new ArrayList<>();
 			}
 		}

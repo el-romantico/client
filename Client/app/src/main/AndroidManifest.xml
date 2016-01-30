@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.elromantico.client">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:name="com.elromantico.client.RitualsApplication"
         android:allowBackup="true"
@@ -21,13 +24,10 @@
         <activity
             android:name=".GameActivity"
             android:hardwareAccelerated="false"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <service android:name="com.elromantico.client.gestures.GestureRecognitionService"
             android:enabled="true" android:label="GestureRecognitionService">
         </service>
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>
