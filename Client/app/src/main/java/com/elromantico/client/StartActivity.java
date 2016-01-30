@@ -38,7 +38,7 @@ public class StartActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.connect_1);
+                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.connectSounds));
                 mp.start();
                 startButton.setBackground(ContextCompat.getDrawable(StartActivity.this, R.drawable.connect2));
                 dialog = new AlertDialog.Builder(StartActivity.this)
@@ -48,6 +48,13 @@ public class StartActivity extends AppCompatActivity {
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
                 RitualsHub.Instance().Connect();
+                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.waitingSounds));
+                        mp.start();
+                    }
+                });
             }
         });
     }

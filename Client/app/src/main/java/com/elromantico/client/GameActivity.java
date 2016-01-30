@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -116,6 +117,8 @@ public class GameActivity extends AppCompatActivity {
                 Toast.makeText(GameActivity.this, "Next round starting!", Toast.LENGTH_LONG);
                 bottomBar.setVisibility(View.GONE);
                 playersCountText.setText("" + playersCount);
+                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.effectSounds));
+                mp.start();
 
                 recognitionService.reset(runeIndex);
             }
@@ -129,9 +132,13 @@ public class GameActivity extends AppCompatActivity {
                 if (isWinner) {
                     bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, R.color.green));
                     bottomText.setText("YOU WIN!");
+                    MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.winSounds));
+                    mp.start();
                 } else {
                     bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, R.color.red));
                     bottomText.setText("YOU LOSE!");
+                    MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.failSounds));
+                    mp.start();
                 }
                 timerHandler.removeCallbacks(timerRunnable);
             }
@@ -160,6 +167,8 @@ public class GameActivity extends AppCompatActivity {
                 bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, android.R.color.holo_blue_light));
                 bottomText.setText("PLEASE WAIT...");
                 hub.Success();
+                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.successSounds));
+                mp.start();
                 timerHandler.removeCallbacks(timerRunnable);
             }
         });
