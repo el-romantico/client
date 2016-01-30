@@ -46,7 +46,6 @@
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_centerInParent="true"
-        android:padding="20dp"
         components:src="@drawable/mouthwashing" />
 
     <LinearLayout

@@ -20,19 +20,12 @@ import com.elromantico.client.gestures.classifier.Distribution;
 
 public class GameActivity extends AppCompatActivity {
 
-    private boolean flag = true;
-
     private class NewRoundHandler implements RitualsHub.NewGameHandler {
 
         @Override
         public void Handle(int playersCount, int runeIndex) {
-            if (flag) {
-                runeImage.setGIFResource(R.drawable.dishwashing);
-                flag = false;
-            } else {
-                runeImage.setGIFResource(R.drawable.mouthwashing);
-                flag = true;
-            }
+            mRuneIndex = runeIndex;
+            runeImage.setGIFResource(DrawablesMap.drawablesMap.get(runeIndex));
             lastTrackedMillis = System.currentTimeMillis();
             timerHandler.post(timerRunnable);
             Toast.makeText(GameActivity.this, "Next round starting!", Toast.LENGTH_LONG);
@@ -48,7 +41,7 @@ public class GameActivity extends AppCompatActivity {
     private TextView bottomText, playersCountText, timeLeftText;
     private GIFView runeImage;
     private int mPlayersCount;
-    private int runeIndex;
+    private int mRuneIndex;
 
     private long elapsedMillis, lastTrackedMillis;
 
@@ -63,7 +56,7 @@ public class GameActivity extends AppCompatActivity {
 
                 @Override
                 public void handle(final Distribution distribution) {
-                    if (runeIndex == distribution.getBestMatch()) {
+                    if (mRuneIndex == distribution.getBestMatch()) {
                         bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, android.R.color.holo_blue_light));
                         bottomText.setText("PLEASE WAIT...");
                         hub.Success();
@@ -108,7 +101,7 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         mPlayersCount = getIntent().getIntExtra(Constants.PLAYERS_COUNT_EXTRA, 0);
-        runeIndex = getIntent().getIntExtra(Constants.RUNE_INDEX_EXTRA, 0);
+        mRuneIndex = getIntent().getIntExtra(Constants.RUNE_INDEX_EXTRA, 0);
 
         Context context = this.getApplicationContext();
         Intent serviceIntent = new Intent(context, GestureRecognitionService.class);
@@ -149,8 +142,7 @@ public class GameActivity extends AppCompatActivity {
         timeLeftText = (TextView) findViewById(R.id.time_left_text);
 
         runeImage = (GIFView) findViewById(R.id.rune_image);
-//       Set image:
-//      runeImage.setImageBitmap();
+        runeImage.setGIFResource(DrawablesMap.drawablesMap.get(mRuneIndex));
 
         bottomText = (TextView) findViewById(R.id.bottom_text);
         bottomBar = (LinearLayout) findViewById(R.id.bottom_bar);
