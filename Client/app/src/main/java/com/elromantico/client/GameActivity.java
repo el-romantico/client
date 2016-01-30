@@ -21,7 +21,7 @@ public class GameActivity extends AppCompatActivity {
     private TextView bottomText, playersCountText;
     private ImageView runeImage;
 
-    private int playersCount, runeIndex;
+    private int mPlayersCount, runeIndex;
 
     private GoogleApiClient client;
 
@@ -29,7 +29,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        playersCount = getIntent().getIntExtra(Constants.PLAYERS_COUNT_EXTRA, 0);
+        mPlayersCount = getIntent().getIntExtra(Constants.PLAYERS_COUNT_EXTRA, 0);
         runeIndex = getIntent().getIntExtra(Constants.RUNE_INDEX_EXTRA, 0);
 
         // Initialize rituals hub.
@@ -39,7 +39,10 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void Handle(int playersCount, int runeIndex) {
-                // Start next game...
+                bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, R.color.green));
+                bottomText.setText("KEEP GOING!");
+                //change picture
+                playersCountText.setText("" + playersCount);
             }
         });
 
@@ -49,11 +52,11 @@ public class GameActivity extends AppCompatActivity {
             public void Handle(boolean isWinner) {
                 bottomBar.setVisibility(View.VISIBLE);
                 if (isWinner) {
-                    bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, R.color.red));
-                    bottomText.setText("YOU LOSE!");
-                } else {
                     bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, R.color.green));
                     bottomText.setText("YOU WIN!");
+                } else {
+                    bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, R.color.red));
+                    bottomText.setText("YOU LOSE!");
                 }
             }
         });
@@ -64,7 +67,7 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         playersCountText = (TextView) findViewById(R.id.players_count_text);
-        playersCountText.setText("" + playersCount);
+        playersCountText.setText("" + mPlayersCount);
 
         runeImage = (ImageView) findViewById(R.id.rune_image);
 //       Set image:
