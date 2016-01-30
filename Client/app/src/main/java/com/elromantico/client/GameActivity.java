@@ -98,14 +98,16 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void Handle(int playersCount, int runeIndex) {
-                //change picture
+
+                mRuneIndex = runeIndex;
+                mPlayersCount = playersCount;
+                runeImage.setGIFResource(DrawablesMap.drawablesMap.get(runeIndex));
                 lastTrackedMillis = System.currentTimeMillis();
+                timerHandler.post(timerRunnable);
                 Toast.makeText(GameActivity.this, "Next round starting!", Toast.LENGTH_LONG);
                 bottomBar.setVisibility(View.GONE);
                 playersCountText.setText("" + playersCount);
 
-                GameActivity.this.mPlayersCount = playersCount;
-                GameActivity.this.mRuneIndex = runeIndex;
                 recognitionService.reset(runeIndex);
             }
         });
