@@ -124,6 +124,7 @@ public class GameActivity extends AppCompatActivity {
                     bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, R.color.red));
                     bottomText.setText("YOU LOSE!");
                 }
+                timerHandler.removeCallbacks(timerRunnable);
             }
         });
 
