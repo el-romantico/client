@@ -39,7 +39,7 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void Handle(int playersCount, int runeIndex) {
-                bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, R.color.green));
+                bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, android.R.color.holo_blue_light));
                 bottomText.setText("KEEP GOING!");
                 //change picture
                 playersCountText.setText("" + playersCount);
