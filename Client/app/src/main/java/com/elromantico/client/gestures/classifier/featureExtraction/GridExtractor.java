@@ -6,8 +6,7 @@ public class GridExtractor implements IFeatureExtractorConstCount {
 	final static int SAMPLE_STEPS = 32;
 
 	public Gesture sampleSignal(Gesture signal) {
-
-		float[][] sampledValues = new float[][]{};
+		float[][] sampledValues = new float[SAMPLE_STEPS][];
 		Gesture sampledSignal = new Gesture(sampledValues, signal.getLabel());
 		float findex;
 

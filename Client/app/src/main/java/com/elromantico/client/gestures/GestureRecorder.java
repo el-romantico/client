@@ -18,7 +18,7 @@ public class GestureRecorder implements SensorEventListener {
     private SensorManager sensorManager;
     private Context context;
     private GestureRecorderHandler handler;
-    private CircularFifoQueue<float[]> currentValues;
+    private CircularFifoQueue<float[]> currentValues = new CircularFifoQueue<>(20);
 
     public GestureRecorder(Context context) {
         this.context = context;

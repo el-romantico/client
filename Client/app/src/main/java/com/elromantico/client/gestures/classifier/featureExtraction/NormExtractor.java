@@ -5,7 +5,7 @@ import com.elromantico.client.gestures.Gesture;
 public class NormExtractor implements IFeatureExtractor {
 
 	public Gesture sampleSignal(Gesture signal) {
-		float[][] sampledValues = new float[][]{};
+		float[][] sampledValues = new float[signal.length()][];
 		Gesture sampledSignal = new Gesture(sampledValues, signal.getLabel());
 
 		float min = Float.MAX_VALUE, max = Float.MIN_VALUE;

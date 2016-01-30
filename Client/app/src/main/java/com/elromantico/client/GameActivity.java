@@ -104,7 +104,7 @@ public class GameActivity extends AppCompatActivity {
 
         Context context = this.getApplicationContext();
         Intent serviceIntent = new Intent(context, GestureRecognitionService.class);
-        context.startService(serviceIntent);
+        bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
 
         // Initialize rituals hub.
         hub = RitualsHub.Instance();
