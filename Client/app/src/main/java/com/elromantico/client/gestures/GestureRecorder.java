@@ -6,12 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import com.elromantico.client.gestures.Gesture;
-
 import org.apache.commons.collections4.queue.CircularFifoQueue;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GestureRecorder implements SensorEventListener {
 

@@ -4,7 +4,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 import com.elromantico.client.gestures.GestureRecognitionService;
 import com.elromantico.client.gestures.GestureRecognitionService.GestureRecognitionHandler;
 import com.elromantico.client.gestures.classifier.Distribution;
-import com.google.android.gms.appindexing.Action;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -29,29 +27,28 @@ public class GameActivity extends AppCompatActivity {
     private int mPlayersCount;
     private int runeIndex;
 
-    GestureRecognitionService recognitionService;
-    GestureRecognitionHandler gestureListener = new GestureRecognitionHandler() {
-
-        @Override
-        public void handle(final Distribution distribution) {
-//            if (runeIndex == distribution.getBestMatch()) {
-//            }
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(GameActivity.this, String.format("%s: %f", distribution.getBestMatch(), distribution.getBestDistance()), Toast.LENGTH_LONG).show();
-                    System.err.println(String.format("%s: %f", distribution.getBestMatch(), distribution.getBestDistance()));
-                }
-            });
-        }
-    };
+    private GestureRecognitionService recognitionService;
     private final ServiceConnection serviceConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName className, IBinder binder) {
             recognitionService = ((GestureRecognitionService.GestureRecognitionServiceBinder) binder).getService();
             recognitionService.startClassificationMode("default");
-            recognitionService.registerListener(gestureListener);
+            recognitionService.setHandler(new GestureRecognitionHandler() {
+
+                @Override
+                public void handle(final Distribution distribution) {
+//            if (runeIndex == distribution.getBestMatch()) {
+//            }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(GameActivity.this, String.format("%s: %f", distribution.getBestMatch(), distribution.getBestDistance()), Toast.LENGTH_LONG).show();
+                            System.err.println(String.format("%s: %f", distribution.getBestMatch(), distribution.getBestDistance()));
+                        }
+                    });
+                }
+            });
         }
 
         @Override

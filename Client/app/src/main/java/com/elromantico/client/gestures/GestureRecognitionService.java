@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.elromantico.client.gestures.classifier.Distribution;
 import com.elromantico.client.gestures.classifier.GestureClassifier;
 import com.elromantico.client.gestures.classifier.featureExtraction.NormedGridExtractor;
@@ -32,25 +29,16 @@ public class GestureRecognitionService extends Service implements GestureRecorde
     private GestureRecorder recorder;
     private GestureClassifier classifier;
     private String activeTrainingSet;
-    private Set<GestureRecognitionHandler> handlers = new HashSet<>();
+    private GestureRecognitionHandler handler;
 
-    public void registerListener(GestureRecognitionHandler listener) {
-        if (listener != null) {
-            handlers.add(listener);
-        }
+    public void setHandler(GestureRecognitionHandler handler) {
+        this.handler = handler;
     }
 
     public void startClassificationMode(String trainingSetName) {
         activeTrainingSet = trainingSetName;
         recorder.start();
         classifier.loadTrainingSet(trainingSetName);
-    }
-
-    public void unregisterListener(GestureRecognitionHandler handler) {
-        handlers.remove(handler);
-        if (handlers.isEmpty()) {
-            stopClassificationMode();
-        }
     }
 
     public void stopClassificationMode() {
@@ -75,9 +63,7 @@ public class GestureRecognitionService extends Service implements GestureRecorde
         Distribution distribution = classifier.classifySignal(activeTrainingSet, new Gesture(values, null));
         recorder.pause(false);
         if (distribution != null && distribution.size() > 0) {
-            for (GestureRecognitionHandler handler : handlers) {
-                handler.handle(distribution);
-            }
+            handler.handle(distribution);
         }
     }
 
