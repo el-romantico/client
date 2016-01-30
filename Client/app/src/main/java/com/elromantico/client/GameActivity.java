@@ -50,7 +50,8 @@ public class GameActivity extends AppCompatActivity {
                 public void handle(final Distribution distribution) {
                     if (distribution.getBestDistance() < minDistance) {
                         minDistance = distribution.getBestDistance();
-                        Log.d("RUNE", "min distance:" + minDistance);
+                        Log.d("RUNE", "min distance:" + minDistance + " , closest: " + distribution.getBestMatch() + " to " + mRuneIndex + " and "
+                        + mIsPlaying);
                     }
 
                     if (mIsPlaying && mRuneIndex == distribution.getBestMatch() && distribution.getBestDistance() < THRESHOLD) {

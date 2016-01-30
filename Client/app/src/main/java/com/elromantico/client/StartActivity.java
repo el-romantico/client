@@ -20,6 +20,12 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
+        dialog = new AlertDialog.Builder(StartActivity.this)
+                .setTitle("Waiting for server...")
+                .setMessage("Please wait for the server to start the game...")
+                .setCancelable(false)
+                .setIcon(android.R.drawable.ic_dialog_alert).create();
+
         RitualsHub.Instance().OnStartGame(new RitualsHub.NewGameHandler() {
 
             @Override
@@ -41,12 +47,7 @@ public class StartActivity extends AppCompatActivity {
                 MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.connectSounds));
                 mp.start();
                 startButton.setBackground(ContextCompat.getDrawable(StartActivity.this, R.drawable.connect2));
-                dialog = new AlertDialog.Builder(StartActivity.this)
-                        .setTitle("Waiting for server...")
-                        .setMessage("Please wait for the server to start the game...")
-                        .setCancelable(false)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+                dialog.show();
                 RitualsHub.Instance().Connect();
                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override

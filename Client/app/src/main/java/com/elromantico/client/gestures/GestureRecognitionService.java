@@ -62,7 +62,7 @@ public class GestureRecognitionService extends Service implements GestureRecorde
         recorder.pause(true);
         Distribution distribution = classifier.classifySignal(activeTrainingSet, new Gesture(values, null));
         recorder.pause(false);
-        if (distribution != null && distribution.size() > 0) {
+        if (distribution != null && distribution.size() > 0 && handler != null) {
             handler.handle(distribution);
         }
     }
