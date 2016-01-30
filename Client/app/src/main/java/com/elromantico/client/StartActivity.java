@@ -2,7 +2,9 @@ package com.elromantico.client;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -36,6 +38,9 @@ public class StartActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.connect_1);
+                mp.start();
+                startButton.setBackground(ContextCompat.getDrawable(StartActivity.this, R.drawable.connect2));
                 dialog = new AlertDialog.Builder(StartActivity.this)
                         .setTitle("Waiting for server...")
                         .setMessage("Please wait for the server to start the game...")
