@@ -9,10 +9,12 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +24,8 @@ import com.elromantico.client.gestures.GestureRecognitionService.GestureRecognit
 import com.elromantico.client.gestures.classifier.Distribution;
 
 public class GameActivity extends AppCompatActivity {
+
+    private PowerManager.WakeLock mWakeLock;
 
     private RitualsHub hub;
     private LinearLayout bottomBar;
@@ -99,6 +103,13 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+        this.mWakeLock.acquire();
 
         mIsPlaying = true;
         mPlayersCount = getIntent().getIntExtra(Constants.PLAYERS_COUNT_EXTRA, 0);
@@ -195,6 +206,7 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        this.mWakeLock.release();
         recognitionService.setHandler(null);
         recognitionService = null;
         unbindService(serviceConnection);
