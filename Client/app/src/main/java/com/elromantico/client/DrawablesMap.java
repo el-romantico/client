@@ -13,5 +13,6 @@ public class DrawablesMap {
     static {
         drawablesMap.put(0, R.drawable.dishwashing);
         drawablesMap.put(1, R.drawable.mouthwashing);
+        drawablesMap.put(2, R.drawable.turntablescratching);
     }
 }
