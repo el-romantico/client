@@ -1,7 +1,5 @@
 package com.elromantico.client.gestures.classifier.featureExtraction;
 
-import java.util.ArrayList;
-
 import com.elromantico.client.gestures.Gesture;
 
 public class GridExtractor implements IFeatureExtractorConstCount {
@@ -9,12 +7,12 @@ public class GridExtractor implements IFeatureExtractorConstCount {
 
 	public Gesture sampleSignal(Gesture signal) {
 
-		ArrayList<float[]> sampledValues = new ArrayList<float[]>();
+		float[][] sampledValues = new float[][]{};
 		Gesture sampledSignal = new Gesture(sampledValues, signal.getLabel());
 		float findex;
 
 		for (int j = 0; j < SAMPLE_STEPS; ++j) {
-			sampledValues.add(new float[3]);
+			sampledValues[j] = new float[3];
 			for (int i = 0; i < 3; ++i) {
 				findex = (float) (signal.length() - 1) * j / (SAMPLE_STEPS - 1);
 				float res = findex - (int) findex;

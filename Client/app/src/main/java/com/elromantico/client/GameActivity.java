@@ -38,18 +38,6 @@ public class GameActivity extends AppCompatActivity {
     GestureRecognitionListener gestureListener = new GestureRecognitionListener() {
 
         @Override
-        public void onGestureLearned(String gestureName) {
-            Toast.makeText(GameActivity.this, String.format("Gesture %s learned", gestureName), Toast.LENGTH_SHORT).show();
-            System.err.println("Gesture %s learned");
-        }
-
-        @Override
-        public void onTrainingSetDeleted(String trainingSet) {
-            Toast.makeText(GameActivity.this, String.format("Training set %s deleted", trainingSet), Toast.LENGTH_SHORT).show();
-            System.err.println(String.format("Training set %s deleted", trainingSet));
-        }
-
-        @Override
         public void onGestureRecognized(final Distribution distribution) {
 //            if (runeIndex == distribution.getBestMatch()) {
 //            }

@@ -21,7 +21,7 @@ public class DTWAlgorithm {
 	}
 
 	static public float calcDistance(Gesture a, Gesture b) {
-		int signalDimensions = a.getValues().get(0).length;
+		int signalDimensions = a.getValues()[0].length;
 		int signal1Length = a.length();
 		int signal2Length = b.length();
 

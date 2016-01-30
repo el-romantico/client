@@ -37,7 +37,7 @@ public class GestureRecorder implements SensorEventListener {
         };
 
         if (currentValues.size() == currentValues.maxSize()) {
-            listener.recognizeGesture(new ArrayList<>(currentValues));
+            listener.recognizeGesture(currentValues.toArray(new float[currentValues.size()][]));
         }
         currentValues.add(value);
     }

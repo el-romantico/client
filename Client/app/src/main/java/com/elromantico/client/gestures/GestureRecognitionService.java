@@ -6,7 +6,6 @@ import android.os.Binder;
 import android.os.IBinder;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.elromantico.client.gestures.classifier.Distribution;
@@ -29,17 +28,8 @@ public class GestureRecognitionService extends Service implements GestureRecorde
     GestureRecorder recorder;
     GestureClassifier classifier;
     String activeTrainingSet;
-    String activeLearnLabel;
 
     Set<GestureRecognitionListener> listeners = new HashSet<>();
-
-    public void deleteTrainingSet(String trainingSetName) {
-        if (classifier.deleteTrainingSet(trainingSetName)) {
-            for (GestureRecognitionListener listener : listeners) {
-                listener.onTrainingSetDeleted(trainingSetName);
-            }
-        }
-    }
 
     public void registerListener(GestureRecognitionListener listener) {
         if (listener != null) {
@@ -77,7 +67,7 @@ public class GestureRecognitionService extends Service implements GestureRecorde
     }
 
     @Override
-    public void recognizeGesture(List<float[]> values) {
+    public void recognizeGesture(float[][] values) {
         recorder.pause(true);
         Distribution distribution = classifier.classifySignal(activeTrainingSet, new Gesture(values, null));
         recorder.pause(false);
@@ -93,5 +83,4 @@ public class GestureRecognitionService extends Service implements GestureRecorde
         recorder.unregisterListener(this);
         return super.onUnbind(intent);
     }
-
 }
