@@ -14,5 +14,6 @@ public class DrawablesMap {
         drawablesMap.put(0, R.drawable.dishwashing);
         drawablesMap.put(1, R.drawable.mouthwashing);
         drawablesMap.put(2, R.drawable.turntablescratching);
+        drawablesMap.put(3, R.drawable.swordsharpening);
     }
 }
