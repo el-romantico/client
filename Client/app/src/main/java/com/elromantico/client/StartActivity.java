@@ -36,13 +36,13 @@ public class StartActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RitualsHub.Instance().Connect();
                 dialog = new AlertDialog.Builder(StartActivity.this)
                         .setTitle("Waiting for server...")
                         .setMessage("Please wait for the server to start the game...")
                         .setCancelable(false)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
+                RitualsHub.Instance().Connect();
             }
         });
     }

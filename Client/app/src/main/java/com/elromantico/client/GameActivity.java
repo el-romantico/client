@@ -30,6 +30,8 @@ public class GameActivity extends AppCompatActivity {
 
     private long elapsedMillis, lastTrackedMillis;
 
+    private static double THRESHOLD = 8.0;
+
     private GestureRecognitionService recognitionService;
     private final ServiceConnection serviceConnection = new ServiceConnection() {
 
@@ -41,7 +43,8 @@ public class GameActivity extends AppCompatActivity {
 
                 @Override
                 public void handle(final Distribution distribution) {
-                    if (mIsPlaying && mRuneIndex == distribution.getBestMatch()) {
+                    if (mIsPlaying && mRuneIndex == distribution.getBestMatch() && distribution.getBestDistance() < THRESHOLD) {
+
                         bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, android.R.color.holo_blue_light));
                         bottomText.setText("PLEASE WAIT...");
                         hub.Success();
@@ -164,5 +167,13 @@ public class GameActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         timerHandler.removeCallbacks(timerRunnable);
+    }
+
+    @Override
+    protected void onDestroy() {
+        recognitionService.setHandler(null);
+        recognitionService = null;
+        unbindService(serviceConnection);
+        super.onDestroy();
     }
 }
