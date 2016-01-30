@@ -4,10 +4,8 @@ import android.content.Context;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,34 +21,11 @@ public class GestureClassifier {
 	private final Context context;
 
 	public GestureClassifier(IFeatureExtractor fE, Context context) {
-		trainingSet = new ArrayList<Gesture>();
+		trainingSet = new ArrayList<>();
 		featureExtractor = fE;
 		this.context = context;
 	}
 
-	public boolean commitData() {
-		if (activeTrainingSet != null && activeTrainingSet != "") {
-			try {
-				FileOutputStream fos = new FileOutputStream(new File(context.getExternalFilesDir(null), activeTrainingSet + ".gst").toString());
-				ObjectOutputStream o = new ObjectOutputStream(fos);
-				o.writeObject(trainingSet);
-				o.close();
-				fos.close();
-				return true;
-			} catch (IOException e) {
-				e.printStackTrace();
-				return false;
-			}
-		} else {
-			return false;
-		}
-	}
-
-	public boolean trainData(String trainingSetName, Gesture signal) {
-		loadTrainingSet(trainingSetName);
-		trainingSet.add(featureExtractor.sampleSignal(signal));
-		return true;
-	}
 
 	@SuppressWarnings("unchecked")
 	public void loadTrainingSet(String trainingSetName) {
@@ -69,18 +44,9 @@ public class GestureClassifier {
 					e.printStackTrace();
 				}
 			} catch (Exception e) {
-				trainingSet = new ArrayList<Gesture>();
+				trainingSet = new ArrayList<>();
 			}
 		}
-	}
-
-	public boolean deleteTrainingSet(String trainingSetName) {
-		if (activeTrainingSet != null && activeTrainingSet.equals(trainingSetName)) {
-			trainingSet = new ArrayList<Gesture>();
-		}
-
-		return context.deleteFile(activeTrainingSet + ".gst");
-
 	}
 
 	public Distribution classifySignal(String trainingSetName, Gesture signal) {
