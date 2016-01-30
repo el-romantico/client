@@ -10,7 +10,6 @@ import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,14 +20,23 @@ import com.elromantico.client.gestures.classifier.Distribution;
 
 public class GameActivity extends AppCompatActivity {
 
+    private boolean flag = true;
+
     private class NewRoundHandler implements RitualsHub.NewGameHandler {
 
         @Override
         public void Handle(int playersCount, int runeIndex) {
-            //change picture
+            if (flag) {
+                runeImage.setGIFResource(R.drawable.dishwashing);
+                flag = false;
+            } else {
+                runeImage.setGIFResource(R.drawable.mouthwashing);
+                flag = true;
+            }
             lastTrackedMillis = System.currentTimeMillis();
+            timerHandler.post(timerRunnable);
             Toast.makeText(GameActivity.this, "Next round starting!", Toast.LENGTH_LONG);
-            bottomBar.setVisibility(View.GONE);
+//            bottomBar.setVisibility(View.GONE);
             playersCountText.setText("" + playersCount);
 
             recognitionService.reset(runeIndex);
@@ -38,7 +46,7 @@ public class GameActivity extends AppCompatActivity {
     private RitualsHub hub;
     private LinearLayout bottomBar;
     private TextView bottomText, playersCountText, timeLeftText;
-    private ImageView runeImage;
+    private GIFView runeImage;
     private int mPlayersCount;
     private int runeIndex;
 
@@ -140,7 +148,7 @@ public class GameActivity extends AppCompatActivity {
 
         timeLeftText = (TextView) findViewById(R.id.time_left_text);
 
-        runeImage = (ImageView) findViewById(R.id.rune_image);
+        runeImage = (GIFView) findViewById(R.id.rune_image);
 //       Set image:
 //      runeImage.setImageBitmap();
 
