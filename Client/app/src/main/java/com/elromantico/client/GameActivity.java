@@ -61,10 +61,11 @@ public class GameActivity extends AppCompatActivity {
                     }
 
                     if (mIsPlaying && mRuneIndex == distribution.getBestMatch() && distribution.getBestDistance() < THRESHOLD) {
-
                         Log.d("RUNE", "won (distance to target):" + distribution.getBestDistance());
+
                         infoLayout.setBackground(ContextCompat.getDrawable(GameActivity.this, R.drawable.winround));
                         infoLayout.setVisibility(View.VISIBLE);
+                        minDistance = 100.0;
                         hub.Success();
                         mIsPlaying = false;
                     }
