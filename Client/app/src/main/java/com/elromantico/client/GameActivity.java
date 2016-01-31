@@ -39,7 +39,7 @@ public class GameActivity extends AppCompatActivity {
 
     private long elapsedMillis, lastTrackedMillis;
 
-    private static double THRESHOLD = 7.0;
+    private static double THRESHOLD = 8.5;
 
     private GestureRecognitionService recognitionService;
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -61,33 +61,11 @@ public class GameActivity extends AppCompatActivity {
                     if (mIsPlaying && mRuneIndex == distribution.getBestMatch() && distribution.getBestDistance() < THRESHOLD) {
 
                         Log.d("RUNE", "won (distance to target):" + distribution.getBestDistance());
-                        infoLayout.setBackground(ContextCompat.getDrawable(GameActivity.this, R.drawable.winround));
+                        infoLayout.setBackground(ContextCompat.getDrawable(GameActivity.this, R.drawable.pleasewait));
                         infoLayout.setVisibility(View.VISIBLE);
                         hub.Success();
                         mIsPlaying = false;
                     }
-
-                    hub.OnNextGame(new RitualsHub.NewGameHandler() {
-
-                        @Override
-                        public void Handle(int playersCount, int runeIndex) {
-
-                            mRuneIndex = runeIndex;
-                            mPlayersCount = playersCount;
-                            mIsPlaying = true;
-                            runeImage.setGIFResource(DrawablesMap.drawablesMap.get(runeIndex));
-
-                            lastTrackedMillis = System.currentTimeMillis();
-                            timerHandler.post(timerRunnable);
-                            Toast.makeText(GameActivity.this, "Next round starting!", Toast.LENGTH_LONG);
-                            infoLayout.setVisibility(View.GONE);
-                            playersCountText.setText("" + playersCount);
-                            MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.effectSounds));
-                            mp.start();
-
-                            recognitionService.reset(runeIndex);
-                        }
-                    });
                 }
             });
         }
@@ -143,6 +121,38 @@ public class GameActivity extends AppCompatActivity {
         Intent serviceIntent = new Intent(context, GestureRecognitionService.class);
         bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
 
+        hub.OnNextGame(new RitualsHub.NewGameHandler() {
+
+            @Override
+            public void Handle(int playersCount, int runeIndex) {
+
+                infoLayout.setBackground(ContextCompat.getDrawable(GameActivity.this, R.drawable.winround));
+                infoLayout.setVisibility(View.VISIBLE);
+
+                timerHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        infoLayout.setVisibility(View.GONE);
+                    }
+                }, Constants.ROUND_WIN_SHOW_IN_MILLIS);
+
+                mRuneIndex = runeIndex;
+                mPlayersCount = playersCount;
+                mIsPlaying = true;
+                runeImage.setGIFResource(DrawablesMap.drawablesMap.get(runeIndex));
+
+                lastTrackedMillis = System.currentTimeMillis();
+                timerHandler.post(timerRunnable);
+                Toast.makeText(GameActivity.this, "Next round starting!", Toast.LENGTH_LONG);
+                infoLayout.setVisibility(View.GONE);
+                playersCountText.setText("" + playersCount);
+                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.effectSounds));
+                mp.start();
+
+                recognitionService.reset(runeIndex);
+            }
+        });
+
         hub.OnEndGame(new RitualsHub.EndGameHandler() {
 
             @Override
@@ -158,6 +168,7 @@ public class GameActivity extends AppCompatActivity {
                     MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.failSounds));
                     mp.start();
                 }
+                mIsPlaying = false;
                 timerHandler.removeCallbacks(timerRunnable);
             }
         });

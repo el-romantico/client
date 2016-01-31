@@ -6,4 +6,5 @@ public class Constants {
     public static final String RUNE_INDEX_EXTRA = "runeIndex";
 
     public static final int ANSWER_TIME_IN_MILLIS = 30000;
+    public static final int ROUND_WIN_SHOW_IN_MILLIS = 500;
 }
