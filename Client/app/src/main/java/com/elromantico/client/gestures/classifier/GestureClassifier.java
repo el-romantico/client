@@ -7,11 +7,13 @@ import android.util.Log;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.elromantico.client.R;
 import com.elromantico.client.gestures.Gesture;
 import com.elromantico.client.gestures.classifier.featureExtraction.IFeatureExtractor;
 
@@ -21,7 +23,6 @@ public class GestureClassifier {
 	protected IFeatureExtractor featureExtractor;
 	protected String activeTrainingSet = "";
 	private final Context context;
-	private String storageDir = "storage/sdcard0";
 
 	public GestureClassifier(IFeatureExtractor fE, Context context) {
 		trainingSet = new ArrayList<>();
@@ -29,15 +30,14 @@ public class GestureClassifier {
 		this.context = context;
 	}
 
-
 	@SuppressWarnings("unchecked")
 	public void loadTrainingSet(String trainingSetName) {
 		if (!trainingSetName.equals(activeTrainingSet)) {
 			activeTrainingSet = trainingSetName;
-			FileInputStream input;
+			InputStream input;
 			ObjectInputStream o;
 			try {
-				input = new FileInputStream(new File(storageDir, activeTrainingSet + ".gst"));
+				input = context.getResources().openRawResource(R.raw.defaultset);
 				o = new ObjectInputStream(input);
 				trainingSet = (ArrayList<Gesture>) o.readObject();
 				try {
@@ -56,7 +56,7 @@ public class GestureClassifier {
 	public Distribution classifySignal(String trainingSetName, Gesture signal) {
 		if (trainingSetName == null) {
 			System.err.println("No Training Set Name specified");
-			trainingSetName = "default";
+			trainingSetName = "defaultset";
 		}
 		if (!trainingSetName.equals(activeTrainingSet)) {
 			loadTrainingSet(trainingSetName);

@@ -150,7 +150,9 @@ public class GameActivity extends AppCompatActivity {
                 MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.newRoundSounds));
                 mp.start();
 
-                recognitionService.reset(runeIndex);
+                if (recognitionService != null) {
+                    recognitionService.reset(runeIndex);
+                }
             }
         });
 
