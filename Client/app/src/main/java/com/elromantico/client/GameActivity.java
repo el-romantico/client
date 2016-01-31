@@ -66,6 +66,28 @@ public class GameActivity extends AppCompatActivity {
                         hub.Success();
                         mIsPlaying = false;
                     }
+
+                    hub.OnNextGame(new RitualsHub.NewGameHandler() {
+
+                        @Override
+                        public void Handle(int playersCount, int runeIndex) {
+
+                            mRuneIndex = runeIndex;
+                            mPlayersCount = playersCount;
+                            mIsPlaying = true;
+                            runeImage.setGIFResource(DrawablesMap.drawablesMap.get(runeIndex));
+
+                            lastTrackedMillis = System.currentTimeMillis();
+                            timerHandler.post(timerRunnable);
+                            Toast.makeText(GameActivity.this, "Next round starting!", Toast.LENGTH_LONG);
+                            infoLayout.setVisibility(View.GONE);
+                            playersCountText.setText("" + playersCount);
+                            MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.effectSounds));
+                            mp.start();
+
+                            recognitionService.reset(runeIndex);
+                        }
+                    });
                 }
             });
         }
@@ -87,6 +109,7 @@ public class GameActivity extends AppCompatActivity {
                 hub.TimeoutExpired();
                 timerHandler.removeCallbacks(timerRunnable);
                 timeLeftText.setText("0 sec");
+                mIsPlaying = false;
                 return;
             }
 
@@ -113,34 +136,12 @@ public class GameActivity extends AppCompatActivity {
         mPlayersCount = getIntent().getIntExtra(Constants.PLAYERS_COUNT_EXTRA, 0);
         mRuneIndex = getIntent().getIntExtra(Constants.RUNE_INDEX_EXTRA, 0);
 
-        Context context = this.getApplicationContext();
-        Intent serviceIntent = new Intent(context, GestureRecognitionService.class);
-        bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-
         // Initialize rituals hub.
         hub = RitualsHub.Instance();
 
-        hub.OnNextGame(new RitualsHub.NewGameHandler() {
-
-            @Override
-            public void Handle(int playersCount, int runeIndex) {
-
-                mRuneIndex = runeIndex;
-                mPlayersCount = playersCount;
-                mIsPlaying = true;
-                runeImage.setGIFResource(DrawablesMap.drawablesMap.get(runeIndex));
-
-                lastTrackedMillis = System.currentTimeMillis();
-                timerHandler.post(timerRunnable);
-                Toast.makeText(GameActivity.this, "Next round starting!", Toast.LENGTH_LONG);
-                infoLayout.setVisibility(View.GONE);
-                playersCountText.setText("" + playersCount);
-                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.effectSounds));
-                mp.start();
-
-                recognitionService.reset(runeIndex);
-            }
-        });
+        Context context = this.getApplicationContext();
+        Intent serviceIntent = new Intent(context, GestureRecognitionService.class);
+        bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
 
         hub.OnEndGame(new RitualsHub.EndGameHandler() {
 

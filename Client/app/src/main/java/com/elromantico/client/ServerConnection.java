@@ -27,11 +27,9 @@ public class ServerConnection extends HubConnection {
 
     @Override
     public void OnStateChanged(StateBase oldState, StateBase newState) {
-        Toast.makeText(context, oldState.getState() + " -> " + newState.getState(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void OnError(Exception exception) {
-        Toast.makeText(context, "On error: " + exception.getMessage(), Toast.LENGTH_LONG).show();
     }
 }
