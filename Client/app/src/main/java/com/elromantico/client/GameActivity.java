@@ -147,7 +147,7 @@ public class GameActivity extends AppCompatActivity {
                 Toast.makeText(GameActivity.this, "Next round starting!", Toast.LENGTH_LONG);
                 infoLayout.setVisibility(View.GONE);
                 playersCountText.setText("" + playersCount);
-                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.effectSounds));
+                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.newRoundSounds));
                 mp.start();
 
                 recognitionService.reset(runeIndex);

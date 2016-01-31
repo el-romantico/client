@@ -13,8 +13,8 @@ import java.util.Random;
 public class AudioMap {
 
     public static Map<Integer, Integer> connectSounds = new HashMap<Integer, Integer>();
-    public static Map<Integer, Integer> effectSounds = new HashMap<Integer, Integer>();
     public static Map<Integer, Integer> failSounds = new HashMap<Integer, Integer>();
+    public static Map<Integer, Integer> newRoundSounds = new HashMap<Integer, Integer>();
     public static Map<Integer, Integer> successSounds = new HashMap<Integer, Integer>();
     public static Map<Integer, Integer> waitingSounds = new HashMap<Integer, Integer>();
     public static Map<Integer, Integer> winSounds = new HashMap<Integer, Integer>();
@@ -25,10 +25,10 @@ public class AudioMap {
         connectSounds.put(2, R.raw.connect_3);
         connectSounds.put(3, R.raw.connect_4);
 
-        effectSounds.put(0, R.raw.effect_1);
-        effectSounds.put(1, R.raw.effect_2);
-
         failSounds.put(0, R.raw.fail_1);
+        failSounds.put(1, R.raw.fail_2);
+
+        newRoundSounds.put(0, R.raw.new_round_1);
 
         successSounds.put(0, R.raw.success_1);
         successSounds.put(1, R.raw.success_2);
@@ -41,6 +41,7 @@ public class AudioMap {
         winSounds.put(0, R.raw.win_1);
         winSounds.put(1, R.raw.win_2);
         winSounds.put(2, R.raw.win_3);
+        winSounds.put(3, R.raw.win_5_a);
     }
 
     public static Integer getRandomSound(Map<Integer, Integer> map) {
