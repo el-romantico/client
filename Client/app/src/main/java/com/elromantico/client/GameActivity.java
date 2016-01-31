@@ -28,12 +28,14 @@ public class GameActivity extends AppCompatActivity {
     private PowerManager.WakeLock mWakeLock;
 
     private RitualsHub hub;
-    private TextView playersCountText, timeLeftText;
+    private TextView playersCountText, timeLeftText, roundText;
     private GIFView runeImage;
     private LinearLayout infoLayout;
     private int mPlayersCount;
     private int mRuneIndex;
     private boolean mIsPlaying;
+
+    private int roundCounter = 1;
 
     private double minDistance = 100.0;
 
@@ -86,14 +88,21 @@ public class GameActivity extends AppCompatActivity {
                 elapsedMillis = Constants.ANSWER_TIME_IN_MILLIS;
                 hub.TimeoutExpired();
                 timerHandler.removeCallbacks(timerRunnable);
-                timeLeftText.setText("0 sec");
+                timeLeftText.setText("0:00");
                 mIsPlaying = false;
                 return;
             }
 
             int elapsedSeconds = (int) (elapsedMillis / 1000);
 
-            timeLeftText.setText(Constants.ANSWER_TIME_IN_MILLIS / 1000 - elapsedSeconds + " sec");
+            String secondsString = "0:";
+            int secondsLeft = Constants.ANSWER_TIME_IN_MILLIS / 1000 - elapsedSeconds;
+            if (secondsLeft < 10) {
+                secondsString += "0" + secondsLeft;
+            } else {
+                secondsString += secondsLeft;
+            }
+            timeLeftText.setText(secondsString);
             timerHandler.postDelayed(this, 1000);
         }
     };
@@ -129,6 +138,9 @@ public class GameActivity extends AppCompatActivity {
                 mPlayersCount = playersCount;
                 mIsPlaying = true;
                 runeImage.setGIFResource(DrawablesMap.drawablesMap.get(runeIndex));
+
+                roundCounter++;
+                roundText.setText("Round " + roundCounter);
 
                 lastTrackedMillis = System.currentTimeMillis();
                 timerHandler.post(timerRunnable);
@@ -173,10 +185,12 @@ public class GameActivity extends AppCompatActivity {
         playersCountText.setText("" + mPlayersCount);
 
         timeLeftText = (TextView) findViewById(R.id.time_left_text);
+        roundText = (TextView) findViewById(R.id.round_text);
 
         Typeface type = Typeface.createFromAsset(getAssets(), "fonts/gagalin.otf");
         timeLeftText.setTypeface(type);
         playersCountText.setTypeface(type);
+        roundText.setTypeface(type);
 
         runeImage = (GIFView) findViewById(R.id.rune_image);
         runeImage.setGIFResource(DrawablesMap.drawablesMap.get(mRuneIndex));
