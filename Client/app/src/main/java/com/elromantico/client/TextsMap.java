@@ -16,6 +16,7 @@ public class TextsMap {
     public static Map<Integer, String> swordMap = new HashMap<Integer, String>();
     public static Map<Integer, String> teethMap = new HashMap<Integer, String>();
     public static Map<Integer, String> handbellMap = new HashMap<Integer, String>();
+    public static Map<Integer, String> guitarMap = new HashMap<Integer, String>();
 
     static {
         dishwashingMap.put(0, "\"Something something make me a sandwitch\" \n- Men");
@@ -44,6 +45,13 @@ public class TextsMap {
         handbellMap.put(1, "Does this remind you of the time you went to church?");
         handbellMap.put(2, "\"Shame. Shame. Shame.\" \n- Some TV show probably");
         textsMap.put(4, handbellMap);
+
+        guitarMap.put(0, "This sounded better in your head...");
+        guitarMap.put(1, "Q: What do you call someone who hangs around with musicians?\n" +
+                "A: A Bass Player. ");
+        guitarMap.put(2, "At least you don't play the bass.");
+        guitarMap.put(3, "The only time you'll feel as a rockstar.");
+        textsMap.put(5, guitarMap);
     }
 
     public static String getRandomString(int runeIndex) {
