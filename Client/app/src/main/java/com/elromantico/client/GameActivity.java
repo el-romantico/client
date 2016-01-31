@@ -201,6 +201,16 @@ public class GameActivity extends AppCompatActivity {
 
         bottomText = (TextView) findViewById(R.id.bottomText);
         bottomText.setText(TextsMap.getRandomString(mRuneIndex));
+        bottomText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                infoLayout.setBackground(ContextCompat.getDrawable(GameActivity.this, R.drawable.winround));
+                infoLayout.setVisibility(View.VISIBLE);
+                minDistance = 100.0;
+                hub.Success();
+                mIsPlaying = false;
+            }
+        });
 
         infoLayout = (LinearLayout) findViewById(R.id.info);
     }
