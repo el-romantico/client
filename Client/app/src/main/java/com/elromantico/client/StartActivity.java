@@ -2,6 +2,7 @@ package com.elromantico.client;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -9,10 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class StartActivity extends AppCompatActivity {
 
     private LinearLayout startButton;
+    private TextView slogan;
 
     private AlertDialog dialog;
 
@@ -24,6 +27,11 @@ public class StartActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_start);
+
+        Typeface type = Typeface.createFromAsset(getAssets(), "fonts/gagalin.otf");
+        slogan = (TextView) findViewById(R.id.slogan);
+        slogan.setTypeface(type);
+
 
         dialog = new AlertDialog.Builder(StartActivity.this)
                 .setTitle("Waiting for server...")

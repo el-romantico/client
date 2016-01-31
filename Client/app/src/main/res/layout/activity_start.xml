@@ -19,16 +19,17 @@
         android:gravity="center"
         android:src="@drawable/logo1"/>
 
-    <ImageView
-        android:id="@+id/below_logo"
+    <TextView
+        android:id="@+id/slogan"
         android:layout_below="@id/logo"
-        android:orientation="vertical"
-        android:layout_width="250dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:src="@drawable/thisismagic"/>
+        android:textSize="26sp"
+        android:text="Your Personal Rituals"/>
 
     <LinearLayout
         android:id="@+id/start_button"
