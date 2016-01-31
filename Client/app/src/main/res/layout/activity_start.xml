@@ -30,7 +30,7 @@
         android:gravity="center"
         android:textSize="22sp"
         android:textColor="@color/romantic_red"
-        android:text="Your Personal Rituals"/>
+        android:text="Show me your rituals"/>
 
     <LinearLayout
         android:id="@+id/start_button"
