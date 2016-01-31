@@ -28,9 +28,9 @@ public class GameActivity extends AppCompatActivity {
     private PowerManager.WakeLock mWakeLock;
 
     private RitualsHub hub;
-    private LinearLayout bottomBar;
-    private TextView bottomText, playersCountText, timeLeftText;
+    private TextView playersCountText, timeLeftText;
     private GIFView runeImage;
+    private LinearLayout infoLayout;
     private int mPlayersCount;
     private int mRuneIndex;
     private boolean mIsPlaying;
@@ -61,8 +61,8 @@ public class GameActivity extends AppCompatActivity {
                     if (mIsPlaying && mRuneIndex == distribution.getBestMatch() && distribution.getBestDistance() < THRESHOLD) {
 
                         Log.d("RUNE", "won (distance to target):" + distribution.getBestDistance());
-                        bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, android.R.color.holo_blue_light));
-                        bottomText.setText("PLEASE WAIT...");
+                        infoLayout.setBackground(ContextCompat.getDrawable(GameActivity.this, R.drawable.winround));
+                        infoLayout.setVisibility(View.VISIBLE);
                         hub.Success();
                         mIsPlaying = false;
                     }
@@ -87,8 +87,6 @@ public class GameActivity extends AppCompatActivity {
                 hub.TimeoutExpired();
                 timerHandler.removeCallbacks(timerRunnable);
                 timeLeftText.setText("0 sec");
-                bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, android.R.color.holo_blue_light));
-                bottomText.setText("PLEASE WAIT...");
                 return;
             }
 
@@ -135,7 +133,7 @@ public class GameActivity extends AppCompatActivity {
                 lastTrackedMillis = System.currentTimeMillis();
                 timerHandler.post(timerRunnable);
                 Toast.makeText(GameActivity.this, "Next round starting!", Toast.LENGTH_LONG);
-                bottomBar.setVisibility(View.GONE);
+                infoLayout.setVisibility(View.GONE);
                 playersCountText.setText("" + playersCount);
                 MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.effectSounds));
                 mp.start();
@@ -148,15 +146,14 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void Handle(boolean isWinner) {
-                bottomBar.setVisibility(View.VISIBLE);
                 if (isWinner) {
-                    bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, R.color.green));
-                    bottomText.setText("YOU WIN!");
+                    infoLayout.setBackground(ContextCompat.getDrawable(GameActivity.this, R.drawable.wingame));
+                    infoLayout.setVisibility(View.VISIBLE);
                     MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.winSounds));
                     mp.start();
                 } else {
-                    bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, R.color.red));
-                    bottomText.setText("YOU LOSE!");
+                    infoLayout.setBackground(ContextCompat.getDrawable(GameActivity.this, R.drawable.lose));
+                    infoLayout.setVisibility(View.VISIBLE);
                     MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.failSounds));
                     mp.start();
                 }
@@ -183,19 +180,7 @@ public class GameActivity extends AppCompatActivity {
         runeImage = (GIFView) findViewById(R.id.rune_image);
         runeImage.setGIFResource(DrawablesMap.drawablesMap.get(mRuneIndex));
 
-        bottomText = (TextView) findViewById(R.id.bottom_text);
-        bottomBar = (LinearLayout) findViewById(R.id.bottom_bar);
-        bottomBar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomBar.setBackgroundColor(ContextCompat.getColor(GameActivity.this, android.R.color.holo_blue_light));
-                bottomText.setText("PLEASE WAIT...");
-                hub.Success();
-                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.successSounds));
-                mp.start();
-                timerHandler.removeCallbacks(timerRunnable);
-            }
-        });
+        infoLayout = (LinearLayout) findViewById(R.id.info);
     }
 
     @Override

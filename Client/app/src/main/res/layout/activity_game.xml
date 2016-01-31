@@ -52,23 +52,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/bottom_bar"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="15dp"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/holo_blue_dark"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/bottom_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CLICK"/>
-
-
-    </LinearLayout>
+        android:id="@+id/info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:background="@drawable/lose"/>
 
 </RelativeLayout>
