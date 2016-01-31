@@ -28,7 +28,8 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:textSize="26sp"
+        android:textSize="22sp"
+        android:textColor="@color/romantic_red"
         android:text="Your Personal Rituals"/>
 
     <LinearLayout
