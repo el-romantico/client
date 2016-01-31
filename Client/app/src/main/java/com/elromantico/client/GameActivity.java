@@ -28,7 +28,7 @@ public class GameActivity extends AppCompatActivity {
     private PowerManager.WakeLock mWakeLock;
 
     private RitualsHub hub;
-    private TextView playersCountText, timeLeftText, roundText;
+    private TextView playersCountText, timeLeftText, roundText, bottomText;
     private GIFView runeImage;
     private LinearLayout infoLayout;
     private int mPlayersCount;
@@ -145,7 +145,8 @@ public class GameActivity extends AppCompatActivity {
 
                 lastTrackedMillis = System.currentTimeMillis();
                 timerHandler.post(timerRunnable);
-                Toast.makeText(GameActivity.this, "Next round starting!", Toast.LENGTH_LONG);
+//                Toast.makeText(GameActivity.this, "Next round starting!", Toast.LENGTH_LONG);
+                bottomText.setText(TextsMap.getRandomString(mRuneIndex));
                 infoLayout.setVisibility(View.GONE);
                 playersCountText.setText("" + playersCount);
                 MediaPlayer mp = MediaPlayer.create(getApplicationContext(), AudioMap.getRandomSound(AudioMap.newRoundSounds));
@@ -197,6 +198,9 @@ public class GameActivity extends AppCompatActivity {
 
         runeImage = (GIFView) findViewById(R.id.rune_image);
         runeImage.setGIFResource(DrawablesMap.drawablesMap.get(mRuneIndex));
+
+        bottomText = (TextView) findViewById(R.id.bottomText);
+        bottomText.setText(TextsMap.getRandomString(mRuneIndex));
 
         infoLayout = (LinearLayout) findViewById(R.id.info);
     }

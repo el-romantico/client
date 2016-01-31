@@ -63,6 +63,16 @@
             components:src="@drawable/mouthwashing" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/bottomText"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:layout_marginBottom="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey"
+        android:text="ASD"/>
+
     <LinearLayout
         android:id="@+id/info"
         android:layout_width="match_parent"
