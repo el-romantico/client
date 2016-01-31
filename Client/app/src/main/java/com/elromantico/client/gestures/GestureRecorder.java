@@ -8,6 +8,10 @@ import android.hardware.SensorManager;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+
 public class GestureRecorder implements SensorEventListener {
 
     public interface GestureRecorderHandler {
@@ -19,6 +23,7 @@ public class GestureRecorder implements SensorEventListener {
     private Context context;
     private GestureRecorderHandler handler;
     private CircularFifoQueue<float[]> currentValues = new CircularFifoQueue<>(20);
+    private ExecutorService tpe = Executors.newFixedThreadPool(1);
 
     public GestureRecorder(Context context) {
         this.context = context;
@@ -30,17 +35,22 @@ public class GestureRecorder implements SensorEventListener {
     }
 
     @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-        float[] value = {
-                sensorEvent.values[SensorManager.DATA_X],
-                sensorEvent.values[SensorManager.DATA_Y],
-                sensorEvent.values[SensorManager.DATA_Z]
-        };
+    public void onSensorChanged(final SensorEvent sensorEvent) {
+        tpe.execute(new Runnable() {
+            @Override
+            public void run() {
+                float[] value = {
+                        sensorEvent.values[SensorManager.DATA_X],
+                        sensorEvent.values[SensorManager.DATA_Y],
+                        sensorEvent.values[SensorManager.DATA_Z]
+                };
 
-        if (currentValues.size() == currentValues.maxSize()) {
-            handler.handle(currentValues.toArray(new float[currentValues.size()][]));
-        }
-        currentValues.add(value);
+                if (currentValues.size() == currentValues.maxSize()) {
+                    handler.handle(currentValues.toArray(new float[currentValues.size()][]));
+                }
+                currentValues.add(value);
+            }
+        });
     }
 
     public void registerListener(GestureRecorderHandler handler) {

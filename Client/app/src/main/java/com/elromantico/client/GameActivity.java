@@ -57,14 +57,19 @@ public class GameActivity extends AppCompatActivity {
                     if (distribution.getBestDistance() < minDistance) {
                         minDistance = distribution.getBestDistance();
                         Log.d("RUNE", "min distance:" + minDistance + " , closest: " + distribution.getBestMatch() + " to " + mRuneIndex + " and "
-                        + mIsPlaying);
+                                + mIsPlaying);
                     }
 
                     if (mIsPlaying && mRuneIndex == distribution.getBestMatch() && distribution.getBestDistance() < THRESHOLD) {
                         Log.d("RUNE", "won (distance to target):" + distribution.getBestDistance());
 
-                        infoLayout.setBackground(ContextCompat.getDrawable(GameActivity.this, R.drawable.winround));
-                        infoLayout.setVisibility(View.VISIBLE);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                infoLayout.setBackground(ContextCompat.getDrawable(GameActivity.this, R.drawable.winround));
+                                infoLayout.setVisibility(View.VISIBLE);
+                            }
+                        });
                         minDistance = 100.0;
                         hub.Success();
                         mIsPlaying = false;
