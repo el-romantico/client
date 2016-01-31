@@ -61,7 +61,7 @@ public class GameActivity extends AppCompatActivity {
                     if (mIsPlaying && mRuneIndex == distribution.getBestMatch() && distribution.getBestDistance() < THRESHOLD) {
 
                         Log.d("RUNE", "won (distance to target):" + distribution.getBestDistance());
-                        infoLayout.setBackground(ContextCompat.getDrawable(GameActivity.this, R.drawable.pleasewait));
+                        infoLayout.setBackground(ContextCompat.getDrawable(GameActivity.this, R.drawable.winround));
                         infoLayout.setVisibility(View.VISIBLE);
                         hub.Success();
                         mIsPlaying = false;
@@ -125,17 +125,6 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void Handle(int playersCount, int runeIndex) {
-
-                infoLayout.setBackground(ContextCompat.getDrawable(GameActivity.this, R.drawable.winround));
-                infoLayout.setVisibility(View.VISIBLE);
-
-                timerHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        infoLayout.setVisibility(View.GONE);
-                    }
-                }, Constants.ROUND_WIN_SHOW_IN_MILLIS);
-
                 mRuneIndex = runeIndex;
                 mPlayersCount = playersCount;
                 mIsPlaying = true;
